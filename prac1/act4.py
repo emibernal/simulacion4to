@@ -1,3 +1,5 @@
+#Este codigo itera secuencialmente cliente por cliente
+
 import random
 
 #Tabla de llegadas
