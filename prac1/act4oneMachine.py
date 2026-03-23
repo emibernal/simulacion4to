@@ -1,7 +1,17 @@
 #Este codigo itera secuencialmente cliente por cliente
-
 import random
+import math
 
+#Distribucion continua exponencial
+def generar_interarribos():
+    r = random.random()
+    return -(1/3) * math.log(1-r)       #Nuestro lambda es 3 pq la tasa media es de 3 clientes
+
+def generar_tiempos_servicios():
+    r = random.random()
+    return -(1/4) * math.log(1-r)       #Nuestro mu es 4 pq la tasa media es de 4 clientes
+
+#Distribucion discreta
 #Tabla de llegadas
 tiempos_llegada = [5, 10, 15, 20, 25, 30, 35, 40]
 prob_llegada_acum = [0.05, 0.10, 0.20, 0.30, 0.60, 0.80, 0.95, 1.00]
@@ -31,7 +41,7 @@ print("-" * 60)
 
 while reloj < 300:
     #Llega un cliente
-    intervalo = obtener_valor(tiempos_llegada, prob_llegada_acum)
+    intervalo = generar_interarribos()
     reloj += intervalo
 
     if reloj > 300: break   #Si llega despues que la maquina termina, no se hace nadd
@@ -39,7 +49,7 @@ while reloj < 300:
     cantidad_clientes += 1
 
     #Se define el servicio que quiere
-    duracion_lavado = obtener_valor(tiempos_servicios, prob_servicios_acum)
+    duracion_lavado = generar_tiempos_servicios()
 
     # El servicio empieza cuando llega el primer cliente
     inicio_servicio = max(reloj, tiempo_fin_lavado_anterior)
@@ -53,7 +63,7 @@ while reloj < 300:
     tiempo_ocupado_maquina += duracion_lavado
     tiempo_fin_lavado_anterior = fin_servicio
 
-    print(f"{cantidad_clientes:<8} | {reloj:<8} | {duracion_lavado:<8} | {inicio_servicio:<8} | {espera_en_cola:<8} | {fin_servicio:<8}")
+    #print(f"{cantidad_clientes:<8} | {reloj:<8} | {duracion_lavado:<8} | {inicio_servicio:<8} | {espera_en_cola:<8} | {fin_servicio:<8}")
 
 if cantidad_clientes > 0:
     tasa_llegada = cantidad_clientes / 300 
